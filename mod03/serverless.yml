@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: hello-world
+service: mod03
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -19,6 +19,11 @@ service: hello-world
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 frameworkVersion: '2'
+
+custom:
+  name: jiko
+  export-env:
+    overwrite: true
 
 provider:
   name: aws
@@ -29,6 +34,14 @@ provider:
 # you can overwrite defaults here
   stage: jiko
   region: eu-west-1
+
+  deploymentBucket:
+    name: trint-workshop-sls-delpoyment-${env:AWS_REGION}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: !GetAtt RestaurantsTable.Arn
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -52,25 +65,39 @@ provider:
 #  environment:
 #    variable1: value1
 
+plugins:
+  - serverless-export-env
+
 # you can add packaging information here
 package:
   patterns:
     - '!package-lock.json'
     - '!package.json'
-#    - '!exclude-me-dir/**'
 #    - include-me.js
 #    - include-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
+  get-index:
+    handler: functions/get-index.handler
     events:
       - http:
           path: /
           method: get
+    environment:
+      restaurants_api: !Sub https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
+
+  get-restaurants:
+    handler: functions/get-restaurants.handler
+    events:
+      - http:
+          path: /restaurants
+          method: get
+    environment:
+      restaurants_table: !Ref RestaurantsTable
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
 #      - httpApi:
 #          path: /users/create
 #          method: get
@@ -107,6 +134,22 @@ functions:
 #    environment:
 #      variable2: value2
 
+resources:
+  Resources:
+    RestaurantsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+
+  Outputs:
+    RestaurantsTableName:
+      Value: !Ref RestaurantsTable
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:

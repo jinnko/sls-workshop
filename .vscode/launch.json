@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "cwd": "${workspaceFolder}/mod2-hello-world",
+        "cwd": "${workspaceFolder}/mod02-hello-world",
         "type": "pwa-node",
         "request": "launch",
         "name": "hello-world",
@@ -13,9 +13,24 @@
         "args": [
           "invoke",
           "local",
-          "--stage=jiko",
           "--function",
           "hello",
+          "-d",
+          "{}"
+        ]
+      },
+
+      {
+        "cwd": "${workspaceFolder}/mod03",
+        "type": "pwa-node",
+        "request": "launch",
+        "name": "mod03/get-restaurants",
+        "program": "${workspaceFolder}/mod03/node_modules/.bin/sls",
+        "args": [
+          "invoke",
+          "local",
+          "--function",
+          "get-restaurants",
           "-d",
           "{}"
         ]
