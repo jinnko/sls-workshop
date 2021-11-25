@@ -158,6 +158,7 @@ resources:
       Properties:
         UserPoolTags:
           Name: jiko
+        UserPoolName: jiko
         AliasAttributes:
           - email
         UsernameConfiguration:
