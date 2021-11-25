@@ -31,6 +31,9 @@ provider:
   lambdaHashingVersion: 20201221
   architecture: arm64
 
+  stackTags:
+    Name: jiko
+
 # you can overwrite defaults here
   stage: jiko
   region: eu-west-1
@@ -150,6 +153,43 @@ resources:
         KeySchema:
           - AttributeName: name
             KeyType: HASH
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolTags:
+          Name: jiko
+        AliasAttributes:
+          - email
+        UsernameConfiguration:
+          CaseSensitive: false
+        AutoVerifiedAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireUppercase: true
+            RequireSymbols: true
+        Schema:
+          - AttributeDataType: String
+            Mutable: true
+            Name: given_name
+            Required: true
+            StringAttributeConstraints:
+              MinLength: "1"
+          - AttributeDataType: String
+            Mutable: true
+            Name: family_name
+            Required: true
+            StringAttributeConstraints:
+              MinLength: "1"
+          - AttributeDataType: String
+            Mutable: true
+            Name: email
+            Required: true
+            StringAttributeConstraints:
+              MinLength: "1"
 
   Outputs:
     RestaurantsTableName:
