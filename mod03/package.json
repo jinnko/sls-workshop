@@ -10,8 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^27.0.3",
     "aws-sdk": "^2.1036.0",
+    "awscred": "^1.5.0",
+    "cheerio": "^1.0.0-rc.10",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
+    "jest": "^27.3.1",
     "serverless": "^2.66.2",
     "serverless-cloudside-plugin": "^1.0.5",
     "serverless-export-env": "^2.0.0"
@@ -19,6 +24,7 @@
   "dependencies": {
     "aws4": "^1.11.0",
     "axios": "^0.24.0",
+    "lodash": "^4.17.21",
     "mustache": "^4.2.0"
   }
 }
