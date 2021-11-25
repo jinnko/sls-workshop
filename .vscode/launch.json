@@ -34,6 +34,22 @@
           "-d",
           "{}"
         ]
+      },
+
+      {
+        "cwd": "${workspaceFolder}/mod03",
+        "type": "pwa-node",
+        "request": "launch",
+        "name": "mod03/search-restaurants",
+        "program": "${workspaceFolder}/mod03/node_modules/.bin/sls",
+        "args": [
+          "invoke",
+          "cloudside",
+          "--function",
+          "search-restaurants",
+          "-d",
+          "{\"body\": \"{\\\"theme\\\":\\\"cartoon\\\"}\"}"
+        ]
       }
     ],
 
