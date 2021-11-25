@@ -212,6 +212,19 @@ resources:
   Outputs:
     RestaurantsTableName:
       Value: !Ref RestaurantsTable
+
+    CognitoUserPoolId:
+      Value: !Ref CognitoUserPool
+
+    CognitoUserPoolArn:
+      Value: !GetAtt CognitoUserPool.Arn
+
+    CognitoUserPoolWebClientId:
+      Value: !Ref WebCognitoUserPoolClient
+
+    CognitoUserPoolServerClientId:
+      Value: !Ref ServerCognitoUserPoolClient
+
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:
