@@ -25,6 +25,10 @@ custom:
   export-env:
     overwrite: true
 
+plugins:
+  - serverless-export-env
+  - serverless-cloudside-plugin
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -70,10 +74,6 @@ provider:
 # you can define service wide environment variables here
 #  environment:
 #    variable1: value1
-
-plugins:
-  - serverless-export-env
-  - serverless-cloudside-plugin
 
 # you can add packaging information here
 package:
