@@ -9,23 +9,21 @@ const init = async () => {
     return
   }
 
-  console.log("Before getting credentials")
+  const { credentials, region } = await promisify(awscred.load)({timeout:3000})
 
-  const { credentials, region } = await promisify(awscred.load)()
+  if ( credentials.accessKeyId && credentials.secretAccessKey && region ) {
+    process.env.AWS_ACCESS_KEY_ID     = credentials.accessKeyId
+    process.env.AWS_SECRET_ACCESS_KEY = credentials.secretAccessKey
+    process.env.AWS_REGION            = region
 
-  console.log({credentials})
-
-  process.env.AWS_ACCESS_KEY_ID     = credentials.accessKeyId
-  process.env.AWS_SECRET_ACCESS_KEY = credentials.secretAccessKey
-  process.env.AWS_REGION            = region
-
-  if (credentials.sessionToken) {
-    process.env.AWS_SESSION_TOKEN = credentials.sessionToken
+    if (credentials.sessionToken) {
+      process.env.AWS_SESSION_TOKEN = credentials.sessionToken
+    }
+    console.log('AWS credential loaded')
+    initialized = true
+  } else {
+    throw new Error("Failed to get credentials.  Federated roles aren't supported by awscred.")
   }
-
-  console.log('AWS credential loaded')
-
-  initialized = true
 }
 
 module.exports = {
