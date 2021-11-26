@@ -38,7 +38,6 @@ provider:
   stackTags:
     Name: jiko
 
-# you can overwrite defaults here
   stage: jiko
   region: eu-west-1
 
@@ -70,6 +69,14 @@ provider:
 #              - - "arn:aws:s3:::"
 #                - "Ref" : "ServerlessDeploymentBucket"
 #                - "/*"
+
+  environment:
+    rest_api_url:
+      Fn::Join:
+        - ""
+        - - https://
+          - !Ref ApiGatewayRestApi
+          - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
 
 # you can define service wide environment variables here
 #  environment:
