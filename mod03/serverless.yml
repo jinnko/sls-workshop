@@ -44,6 +44,9 @@ provider:
   deploymentBucket:
     name: trint-workshop-sls-delpoyment-${env:AWS_REGION}
 
+  eventBridge:
+    useCloudFormation: true
+
   iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:scan
@@ -63,6 +66,9 @@ provider:
     - Effect: Allow
       Action: events:PutEvents
       Resource: !GetAtt EventBus.Arn
+    - Effect: Allow
+      Action: sns:Publish
+      Resource: !Ref RestaurantNotificationTopic
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -164,6 +170,20 @@ functions:
             arn: !GetAtt CognitoUserPool.Arn
     environment:
       bus_name: !Ref EventBus
+
+  notify-restaurant:
+    handler: functions/notify-restaurant.handler
+    events:
+      - eventBridge:
+          eventBus: !Ref EventBus
+          pattern:
+            source:
+              - big-mouth
+            detail-type:
+              - order_placed
+    environment:
+      bus_name: !Ref EventBus
+      restaurant_notification_topic: !Ref RestaurantNotificationTopic
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -288,6 +308,8 @@ resources:
       Type: AWS::Events::EventBus
       Properties:
         Name: order_events_${self:service}_${self:provider.stage}
+    RestaurantNotificationTopic:
+      Type: AWS::SNS::Topic
 
   Outputs:
     RestaurantsTableName:
@@ -307,6 +329,12 @@ resources:
 
     EventBusName:
       Value: !Ref EventBus
+
+    RestaurantNotificationTopicName:
+      Value: !GetAtt RestaurantNotificationTopic.TopicName
+
+    RestaurantNotificationTopicArn:
+      Value: !Ref RestaurantNotificationTopic
 
 # you can add CloudFormation resource templates here
 #resources:
