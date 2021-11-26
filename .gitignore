@@ -1,5 +1,6 @@
 .aws
 .env
+.env-outputs
 .serverless/
 node_modules/
 KmsKey.json

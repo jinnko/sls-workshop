@@ -27,7 +27,8 @@
     "lumigo-cli": "^0.48.4",
     "serverless": "^2.66.2",
     "serverless-cloudside-plugin": "^1.0.5",
-    "serverless-export-env": "^2.0.0"
+    "serverless-export-env": "^2.0.0",
+    "serverless-export-outputs": "^1.0.2"
   },
   "dependencies": {
     "@middy/core": "^2.5.3",
