@@ -11,7 +11,7 @@
     "test": "npm run dotEnv && cross-env TEST_MODE=handler jest --silent",
     "test-verbose": "npm run dotEnv && cross-env TEST_MODE=handler jest",
     "lumigo:eventbus": "npm run dotEnv && node_modules/.bin/lumigo-cli tail-eventbridge-bus -r $AWS_REGION -n $(awk -F= '/^bus_name/ {print $2}' .env)",
-    "lumigo:sns": "npm run dotEnv && node_modules/.bin/lumigo-cli tail-sns -r $AWS_REGION -n $(awk -F= '/^restaurant_notification_topic/ {print $2}' .env)"
+    "lumigo:sns": "npm run dotEnv && node_modules/.bin/lumigo-cli tail-sns -r $AWS_REGION -n $(awk -F= '/^restaurant_notification_topic/ {gsub(\".*:\", \"\", $2); print $2}' .env)"
   },
   "keywords": [],
   "author": "",
