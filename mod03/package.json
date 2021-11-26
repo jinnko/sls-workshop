@@ -9,7 +9,9 @@
     "acceptance": "npm run dotEnv && cross-env TEST_MODE=http jest --silent",
     "acceptance-verbose": "npm run dotEnv && cross-env TEST_MODE=http jest",
     "test": "npm run dotEnv && cross-env TEST_MODE=handler jest --silent",
-    "test-verbose": "npm run dotEnv && cross-env TEST_MODE=handler jest"
+    "test-verbose": "npm run dotEnv && cross-env TEST_MODE=handler jest",
+    "lumigo:eventbus": "npm run dotEnv && node_modules/.bin/lumigo-cli tail-eventbridge-bus -r $AWS_REGION -n $(awk -F= '/^bus_name/ {print $2}' .env)",
+    "lumigo:sns": "npm run dotEnv && node_modules/.bin/lumigo-cli tail-sns -r $AWS_REGION -n $(awk -F= '/^restaurant_notification_topic/ {print $2}' .env)"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "jest": "^27.3.1",
+    "lumigo-cli": "^0.48.4",
     "serverless": "^2.66.2",
     "serverless-cloudside-plugin": "^1.0.5",
     "serverless-export-env": "^2.0.0"
