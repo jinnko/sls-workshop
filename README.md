@@ -40,11 +40,11 @@ https://github.com/theburningmonk/prsls-trint/
 
   98. Delete the keys
 
-         for x in get search; do
+          for x in get search; do
               aws ssm delete-parameter --region $AWS_REGION --name /mod03/$SLS_STAGE/$x-restaurants/config
-         done
+          done
 
   99. Delete KMS key
 
-         aws kms disable-key --region $AWS_REGION --key-id $KeyId
-         aws kms schedule-key-deletion --region $AWS_REGION --key-id $KeyId --pending-window-in-days 7
+          aws kms disable-key --region $AWS_REGION --key-id $(jq -Mr '.KeyMetadata.KeyId' KmsKey.json)
+          aws kms schedule-key-deletion --region $AWS_REGION --key-id $(jq -Mr '.KeyMetadata.KeyId' KmsKey.json) --pending-window-in-days 7
