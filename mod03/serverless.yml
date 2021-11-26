@@ -60,6 +60,9 @@ provider:
     - Effect: Allow
       Action: kms:Decrypt
       Resource: ${ssm:/${self:service}/${self:provider.stage}/kmsArn}
+    - Effect: Allow
+      Action: events:PutEvents
+      Resource: !GetAtt EventBus.Arn
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -141,6 +144,19 @@ functions:
             arn: !GetAtt CognitoUserPool.Arn
     environment:
       restaurants_table: !Ref RestaurantsTable
+
+  place-order:
+    handler: functions/place-order.handler
+    events:
+      - http:
+          path: /orders
+          method: post
+          authorizer:
+            name: CognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: !GetAtt CognitoUserPool.Arn
+    environment:
+      bus_name: !Ref EventBus
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -261,6 +277,10 @@ resources:
             - - https://
               - !Ref ApiGatewayRestApi
               - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
+    EventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: order_events_${self:service}_${self:provider.stage}
 
   Outputs:
     RestaurantsTableName:
@@ -277,6 +297,9 @@ resources:
 
     CognitoUserPoolServerClientId:
       Value: !Ref ServerCognitoUserPoolClient
+
+    EventBusName:
+      Value: !Ref EventBus
 
 # you can add CloudFormation resource templates here
 #resources:
