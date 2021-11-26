@@ -21,6 +21,8 @@ const findRestaurantsByTheme = async (theme, count) => {
 }
 
 module.exports.handler = middy(async (event, context) => {
+  console.info(context.secretString)
+
   const req = JSON.parse(event.body)
   const theme = req.theme
   const restaurants = await findRestaurantsByTheme(theme, context.config.defaultResults)
@@ -35,6 +37,7 @@ module.exports.handler = middy(async (event, context) => {
   cacheExpiry: 1 * 60 * 1000, // 1 mins
   setToContext: true,
   fetchData: {
-    config: `/${serviceName}/${stage}/search-restaurants/config`
+    config: `/${serviceName}/${stage}/search-restaurants/config`,
+    secretString: `/${serviceName}/${stage}/search-restaurants/secretString`
   }
 }))
