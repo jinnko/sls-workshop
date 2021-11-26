@@ -9,7 +9,11 @@ const init = async () => {
     return
   }
 
+  console.log("Before getting credentials")
+
   const { credentials, region } = await promisify(awscred.load)()
+
+  console.log({credentials})
 
   process.env.AWS_ACCESS_KEY_ID     = credentials.accessKeyId
   process.env.AWS_SECRET_ACCESS_KEY = credentials.secretAccessKey
